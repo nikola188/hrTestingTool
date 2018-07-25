@@ -3,12 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/zoran.milicevic/Documents/NetBeansProjects/HRToolDB/src/DAO/User.java</file>
-            <file>file:/C:/Users/zoran.milicevic/Documents/NetBeansProjects/HRToolDB/src/hrtooldb/HRToolDB.java</file>
-            <file>file:/C:/Users/zoran.milicevic/Documents/NetBeansProjects/HRToolDB/src/LogIn/Loger.java</file>
-            <file>file:/C:/Users/zoran.milicevic/Documents/NetBeansProjects/HRToolDB/src/Hibernate/HibernateUtil.java</file>
-            <file>file:/C:/Users/zoran.milicevic/Documents/NetBeansProjects/HRToolDB/src/LogIn/LoggerInterface.java</file>
-            <file>file:/C:/Users/zoran.milicevic/Documents/NetBeansProjects/HRToolDB/src/hibernate.cfg.xml</file>
+            <file>file:/C:/Projects/hrTestingTool/src/DAO/AnswersDAO.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Beans/Technology.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Core/App.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/DAO/QuestionDAO.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/hibernate.cfg.xml</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Beans/Question.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Hibernate/HibernateUtil.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/util2/TestQuestion.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Beans/CandidateTechnology.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Core/GenerateQuestion.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/test/Test.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Beans/Candidate.java</file>
+            <file>file:/C:/Projects/hrTestingTool/src/Beans/Answers.java</file>
         </group>
     </open-files>
 </project-private>
