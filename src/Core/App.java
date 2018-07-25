@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author zoran.milicevic
+ * @author nikola uzelac
  */
 
 //uzelac
@@ -23,7 +23,7 @@ public class App {
         
         //if he doesnt exist
         //return false;
-        
+        //dodajem komentar
         //if he does, call generateQuestion
 //        GenerateQuestion.getQuestions(id_candidate, number);
         return true;
