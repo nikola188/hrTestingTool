@@ -25,7 +25,7 @@ public class App {
         //return false;
         
         //if he does, call generateQuestion
-        GenerateQuestion.getQuestions(id_candidate, number);
+//        GenerateQuestion.getQuestions(id_candidate, number);
         return true;
     }
     
