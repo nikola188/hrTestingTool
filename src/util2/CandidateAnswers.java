@@ -52,8 +52,6 @@ public class CandidateAnswers {
         CandidateAnswers.list = list;
     }
     
-    
-  
     public void insert(CandidateAnswers ca){
         list.add(ca);
     }
@@ -63,5 +61,4 @@ public class CandidateAnswers {
         list.remove(ca);
     }
     
-   
 }
