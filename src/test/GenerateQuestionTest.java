@@ -8,7 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import util2.TestQuestion;
 
-public class Test {
+public class GenerateQuestionTest {
     
    private static SessionFactory factory;
    private static Session session;
