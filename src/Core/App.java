@@ -30,17 +30,25 @@ public class App {
     }
     
     public static TestQuestion loadQuestion(int i){
-        //loadujes iz GenerateQuestion list
-        return null;
+        return GenerateQuestion.getList().get(i);
     }
     
     public static void answerQuestion(CandidateAnswers ca){
         //put the answer in CandidateAnswers.list
         //but you must check if it already is in the list if it does remove
+        List<CandidateAnswers> list= CandidateAnswers.getList();
+        
+        for(CandidateAnswers c: list){
+            if(c.getQuestion().getId() == ca.getQuestion().getId()){
+                list.remove(c); 
+            }
+        }
+        list.add(ca);
+        
     }
     
     public static List<ResultUtil> finishTest(){
-        List<ResultUtil>list= Autocorrect.autocorrect(CandidateAnswers.getList());
+        List<ResultUtil> list= Autocorrect.autocorrect(CandidateAnswers.getList());
         return list;
     }
     
