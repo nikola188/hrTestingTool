@@ -22,4 +22,14 @@ public class GenerateQuestion {
     public static void getQuestions(int id_candidate, int number){
 
     }
+
+    public static List<TestQuestion> getList() {
+        return list;
+    }
+
+    public static void setList(List<TestQuestion> list) {
+        GenerateQuestion.list = list;
+    }
+    
+    
 }
