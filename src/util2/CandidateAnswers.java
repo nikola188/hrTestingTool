@@ -56,7 +56,6 @@ public class CandidateAnswers {
         list.add(ca);
     }
     
-    //not sure!!!
     public void remove(CandidateAnswers ca){
         list.remove(ca);
     }
