@@ -5,7 +5,11 @@
  */
 package View;
 
+import Core.GenerateQuestion;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import util2.TestQuestion;
 import util2.TimeRestriction;
 
 /**
@@ -15,6 +19,7 @@ import util2.TimeRestriction;
  */
 public class QuestionsPage extends javax.swing.JPanel {
     
+    private List<TestQuestion> questions;
     private static int MINUTES = 60;
     private int candidateId;
     private int numberOfQuestions;
@@ -26,13 +31,14 @@ public class QuestionsPage extends javax.swing.JPanel {
     /**
      * Creates new form QuestionsPage
      */
-    public QuestionsPage(int numberOfQuestions, int testDuration, int candidateId) {
+    public QuestionsPage(int numberOfQuestions, int testDuration, int candidateId) throws Exception {
         this.numberOfQuestions = numberOfQuestions;
         this.testDuration = testDuration * MINUTES;
         this.candidateId = candidateId;
         initComponents();
         TimeRestriction.TESTDURATION = this.testDuration;
         restriction = new TimeRestriction(timeBar);
+        initQuestionPanel(this.candidateId, this.numberOfQuestions);
     }
 
     /**
@@ -47,6 +53,7 @@ public class QuestionsPage extends javax.swing.JPanel {
         endBtn = new javax.swing.JButton();
         timeBar = new javax.swing.JProgressBar();
         timeLabel = new javax.swing.JLabel();
+        tabPanelQuestions = new javax.swing.JTabbedPane();
 
         endBtn.setText("End Test");
         endBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -68,17 +75,22 @@ public class QuestionsPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(endBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(timeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(timeBar, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE))
+                    .addComponent(tabPanelQuestions)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(endBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(timeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(timeBar, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(228, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(tabPanelQuestions, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(timeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -98,7 +110,18 @@ public class QuestionsPage extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton endBtn;
+    private javax.swing.JTabbedPane tabPanelQuestions;
     private javax.swing.JProgressBar timeBar;
     private javax.swing.JLabel timeLabel;
     // End of variables declaration//GEN-END:variables
+
+    private void initQuestionPanel(int candidateId, int numberOfQuestions) throws Exception {
+        GenerateQuestion.getQuestions(candidateId, numberOfQuestions);
+        questions = GenerateQuestion.getList();
+        int numQuestions = questions.size();
+        for(int i = 0; i < numQuestions; i++){
+            tabPanelQuestions.addTab("Question " + (i + 1), new JPanel());
+        }
+    }
+
 }
