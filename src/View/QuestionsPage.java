@@ -11,6 +11,7 @@ import util2.TimeRestriction;
 /**
  *
  * @author nikola.panajotovic
+ * @author nikola.bijelic
  */
 public class QuestionsPage extends javax.swing.JPanel {
     

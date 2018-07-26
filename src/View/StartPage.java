@@ -6,6 +6,9 @@
 package View;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import util2.CandidateDataCheck;
 
 /**
  *
@@ -100,16 +103,36 @@ public class StartPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
-           this.setVisible(false);
-           QuestionsPage questionsPage = new QuestionsPage();
-           questionsPage.setParent(root);
-           questionsPage.setBounds(this.getBounds());
-           root.getContentPane().add(questionsPage);
+           
+           if(CandidateDataCheck.everythingFine(candidateIdTxt.getText(), nmbOfQestTxt.getText(), testDurationTxt.getText())){
+               QuestionsPage questionsPage = new QuestionsPage();
+               questionsPage.setParent(root);
+               questionsPage.setBounds(this.getBounds());
+               root.getContentPane().add(questionsPage);
+               this.setVisible(false);
+           }else {
+               JOptionPane.showMessageDialog(root, "Numbers only!");
+           }
+           
     }//GEN-LAST:event_startBtnActionPerformed
 
     public void setParent(JFrame frame){
         root = frame;
     }
+
+    public JTextField getCandidateIdTxt() {
+        return candidateIdTxt;
+    }
+
+    public JTextField getNmbOfQestTxt() {
+        return nmbOfQestTxt;
+    }
+
+    public JTextField getTestDurationTxt() {
+        return testDurationTxt;
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField candidateIdTxt;
