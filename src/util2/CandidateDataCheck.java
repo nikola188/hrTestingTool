@@ -1,7 +1,6 @@
 
 package util2;
 
-import javax.swing.JFrame;
 
 
 /**

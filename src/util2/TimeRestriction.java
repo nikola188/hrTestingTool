@@ -12,7 +12,7 @@ import javax.swing.Timer;
  */
 public class TimeRestriction {
     
-    private static int TESTDURATION = 30;
+    public static int TESTDURATION;
     private static int DELAY = 1000;
     
     private int interval;
@@ -42,6 +42,7 @@ public class TimeRestriction {
 
     private void initTimeBar(JProgressBar bar) {
         this.bar = bar;
+        bar.setMaximum(TESTDURATION);
         interval = this.bar.getMaximum();
         this.bar.setValue(interval);
     }

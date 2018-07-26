@@ -15,16 +15,24 @@ import util2.TimeRestriction;
  */
 public class QuestionsPage extends javax.swing.JPanel {
     
+    private static int MINUTES = 60;
+    private int candidateId;
+    private int numberOfQuestions;
+    private int testDuration;
+    
     private JFrame root;
 
     private TimeRestriction restriction;
     /**
      * Creates new form QuestionsPage
      */
-    public QuestionsPage() {
+    public QuestionsPage(int numberOfQuestions, int testDuration, int candidateId) {
+        this.numberOfQuestions = numberOfQuestions;
+        this.testDuration = testDuration * MINUTES;
+        this.candidateId = candidateId;
         initComponents();
+        TimeRestriction.TESTDURATION = this.testDuration;
         restriction = new TimeRestriction(timeBar);
-        this.setVisible(true);
     }
 
     /**
@@ -48,6 +56,7 @@ public class QuestionsPage extends javax.swing.JPanel {
         });
 
         timeBar.setMaximum(30);
+        timeBar.setStringPainted(true);
 
         timeLabel.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

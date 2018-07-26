@@ -49,7 +49,7 @@ public class StartPage extends javax.swing.JPanel {
 
         candidateIdTxt.setToolTipText("");
 
-        jLabel3.setText("Test Duration:");
+        jLabel3.setText("Test Duration(min):");
 
         startBtn.setText("Start Test");
         startBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -64,21 +64,22 @@ public class StartPage extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(425, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(startBtn)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(testDurationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(18, 18, 18)
-                            .addComponent(nmbOfQestTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(candidateIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(startBtn)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(nmbOfQestTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(candidateIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(testDurationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(521, 521, 521))
         );
         layout.setVerticalGroup(
@@ -105,7 +106,7 @@ public class StartPage extends javax.swing.JPanel {
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
            
            if(CandidateDataCheck.everythingFine(candidateIdTxt.getText(), nmbOfQestTxt.getText(), testDurationTxt.getText())){
-               QuestionsPage questionsPage = new QuestionsPage();
+               QuestionsPage questionsPage = new QuestionsPage(Integer.parseInt(nmbOfQestTxt.getText()), Integer.parseInt(testDurationTxt.getText()), Integer.parseInt(candidateIdTxt.getText()));
                questionsPage.setParent(root);
                questionsPage.setBounds(this.getBounds());
                root.getContentPane().add(questionsPage);
