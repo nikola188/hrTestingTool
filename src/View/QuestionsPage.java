@@ -112,7 +112,7 @@ public class QuestionsPage extends javax.swing.JPanel {
         restriction.stopTime();
         for(JCheckBox box : candidateAnswers){
             if(box.isSelected()){
-                System.out.println(box.getText());
+                System.out.println(box.getText() + " for question: " + box.getActionCommand());
             }
         }
     }//GEN-LAST:event_endBtnActionPerformed
@@ -154,6 +154,7 @@ public class QuestionsPage extends javax.swing.JPanel {
             
             while(iter.hasNext()){
                 JCheckBox checkBox = new JCheckBox();
+                checkBox.setActionCommand(q.getText());
                 candidateAnswers.add(checkBox);
                 Answers a = (Answers) iter.next();
                 String answer = a.getText();
