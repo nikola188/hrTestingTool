@@ -43,8 +43,6 @@ public class Candidate implements Serializable {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @Column(name = "pass")
-    private String pass;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCandidate")
     private Collection<Result> resultCollection;
     @OneToMany(mappedBy = "idCandidate")
@@ -79,14 +77,6 @@ public class Candidate implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
     }
 
     @XmlTransient

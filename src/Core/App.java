@@ -15,24 +15,19 @@ import java.util.List;
 
 /**
  *
- * @author nikola uzelac
+ * @author zoran.milicevic
  */
 
-//uzelac
+
 public class App {
-    public static boolean login(int id_candidate, int time, int number){
-        //check if the user exists in the database
-        List<Candidate> candidates = CandidateDAO.get();
-        for(Candidate c:candidates){
-            if(c.getId().equals(id_candidate)){
-                System.out.println(c);
-            }
-        }
-        //if he doesnt exist
-        //return false;
-        //dodajem komentar
-        //if he does, call generateQuestion
-//        GenerateQuestion.getQuestions(id_candidate, number);
+    //uzelac
+    public static boolean login(int id_candidate, int time, int number) throws Exception{
+        Candidate candidate = CandidateDAO.get(id_candidate);
+        if(candidate != null){
+            GenerateQuestion.getQuestions(id_candidate, number);
+        } else {
+            return false;
+        }    
         return true;
     }
     
