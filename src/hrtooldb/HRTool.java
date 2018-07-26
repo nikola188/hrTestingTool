@@ -28,14 +28,11 @@ public class HRTool {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-//        Session s = Hibernate.HibernateUtil.getSessionFactory().openSession();
-//        s.beginTransaction();
-//        
-//        s.getTransaction().commit();
-//        s.close();
-
-
-        App.login(1, 3, 3);
+        Session s = Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        
+        s.getTransaction().commit();
+        s.close();
 
     }
 
