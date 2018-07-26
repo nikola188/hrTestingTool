@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 /**
  *
  * @author nikola.panajotovic
+ * @author nikola.bijelic
  */
 public class TestGUI extends javax.swing.JFrame {
 
@@ -14,6 +15,7 @@ public class TestGUI extends javax.swing.JFrame {
      */
     public TestGUI() {
         initComponents();
+        startPage2.setParent(this);
     }
 
     /**
@@ -25,35 +27,17 @@ public class TestGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        startPage2 = new View.StartPage();
         jLabel1 = new javax.swing.JLabel();
+        startPage2 = new View.StartPage();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/engineeringlogo.png"))); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(61, Short.MAX_VALUE)
-                .addComponent(startPage2, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(startPage2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        getContentPane().add(jLabel1, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(startPage2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -88,7 +72,9 @@ public class TestGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TestGUI().setVisible(true);
+                JFrame frame = new TestGUI();
+                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                frame.setVisible(true);
             }
         });
     }
