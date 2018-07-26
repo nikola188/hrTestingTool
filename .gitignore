@@ -1,0 +1,4 @@
+$echo "private.properties" >> .gitignore
+$echo "private.xml" >> .gitignore
+/nbproject/private/
+/dist/

@@ -36,8 +36,8 @@ public class AnswersDAO {
     public static List<Answers> get(){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query q= s.createQuery("from Answers");
-        List<Answers> list=q.list();
+        Query q = s.createQuery("from Answers");
+        List<Answers> list = q.list();
         s.getTransaction().commit();
         s.close();
         return list;
@@ -60,4 +60,15 @@ public class AnswersDAO {
         s.close();
         return true;
     } 
+    
+    public static List<Answers> getByQuestionId(int questionId){
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q = s.createQuery("from Answers where idQuestion = :questionIdParam");
+        q.setInteger("questionIdParam", questionId);
+        List<Answers> list = q.list();
+        s.getTransaction().commit();
+        s.close();
+        return list;
+    }
 }

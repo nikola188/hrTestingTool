@@ -45,19 +45,13 @@ Contributor(s):
     <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost/hrtooldb?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost/first?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
-    <mapping class="Beans.Actor"/>
     <mapping class="Beans.Answers"/>
-    <mapping class="Beans.Campaign"/>
-    <mapping class="Beans.Candidate_Skills"/>
-    <mapping class="Beans.Final_Result"/>
-    <mapping class="Beans.Hr_Interview"/>
-    <mapping class="Beans.Interview"/>
-    <mapping class="Beans.Points_Table"/>
+    <mapping class="Beans.Candidate"/>
+    <mapping class="Beans.CandidateTechnology"/>
     <mapping class="Beans.Question"/>
-    <mapping class="Beans.Skills"/>
-    <mapping class="Beans.Type"/>
-    <mapping class="Beans.User"/>
+    <mapping class="Beans.Result"/>
+    <mapping class="Beans.Technology"/>
     </session-factory>
 </hibernate-configuration>
