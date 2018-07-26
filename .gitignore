@@ -1,3 +1,2 @@
-# $echo "private.properties" >> .gitignore
-# $echo "private.xml" >> .gitignore
-/private/*
+$echo "private.properties" >> .gitignore
+$echo "private.xml" >> .gitignore
