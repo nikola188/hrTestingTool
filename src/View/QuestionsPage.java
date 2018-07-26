@@ -9,7 +9,6 @@ import Beans.Answers;
 import Core.GenerateQuestion;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Label;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -110,6 +109,7 @@ public class QuestionsPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void endBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endBtnActionPerformed
+        restriction.stopTime();
         for(JCheckBox box : candidateAnswers){
             if(box.isSelected()){
                 System.out.println(box.getText());
@@ -163,5 +163,4 @@ public class QuestionsPage extends javax.swing.JPanel {
             tabPanelQuestions.addTab("Question " + (i + 1), panel);
         }
     }
-
 }
