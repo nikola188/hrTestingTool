@@ -39,6 +39,12 @@ public class Candidate implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "pass")
+    private String pass;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCandidate")
     private Collection<Result> resultCollection;
     @OneToMany(mappedBy = "idCandidate")
@@ -57,6 +63,30 @@ public class Candidate implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     @XmlTransient
@@ -99,7 +129,7 @@ public class Candidate implements Serializable {
 
     @Override
     public String toString() {
-        return "Beans.Candidate[ id=" + id + " ]";
+        return "Beans.Candidate[ id=" + id + " " + firstName + " ]";
     }
     
 }

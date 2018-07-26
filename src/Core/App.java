@@ -6,6 +6,8 @@
 package Core;
 
 import Beans.Result;
+import DAO.CandidateDAO;
+import Beans.Candidate;
 import util2.CandidateAnswers;
 import util2.ResultUtil;
 import util2.TestQuestion;
@@ -20,7 +22,12 @@ import java.util.List;
 public class App {
     public static boolean login(int id_candidate, int time, int number){
         //check if the user exists in the database
-        
+        List<Candidate> candidates = CandidateDAO.get();
+        for(Candidate c:candidates){
+            if(c.getId().equals(id_candidate)){
+                System.out.println(c);
+            }
+        }
         //if he doesnt exist
         //return false;
         //dodajem komentar
