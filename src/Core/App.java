@@ -38,7 +38,6 @@ public class App {
     public static void answerQuestion(CandidateAnswers ca){
         //put the answer in CandidateAnswers.list
         //but you must check if it already is in the list if it does remove
-	//added implementation
         List<CandidateAnswers> list= CandidateAnswers.getList();
         
         for(CandidateAnswers c: list){
