@@ -6,11 +6,14 @@
 package Beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +23,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 
 /**
  *
@@ -45,8 +50,9 @@ public class Candidate implements Serializable {
     private String lastName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCandidate")
     private Collection<Result> resultCollection;
-    @OneToMany(mappedBy = "idCandidate")
-    private Collection<CandidateTechnology> candidateTechnologyCollection;
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "idCandidate")
+    private Collection<CandidateTechnology> candidateTechnologyCollection = new ArrayList<CandidateTechnology>();
 
     public Candidate() {
     }

@@ -25,11 +25,11 @@ public class AnswersDAO {
     }
     
     public static Answers get(int id){
-        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        Session s= Hibernate.HibernateUtil.getSessionFactory().getCurrentSession();
         s.beginTransaction();
         Answers a = (Answers) s.get(Answers.class, id);
         s.getTransaction().commit();
-        s.close();
+//        s.close();
         return a;
     }
     
@@ -39,7 +39,7 @@ public class AnswersDAO {
         Query q = s.createQuery("from Answers");
         List<Answers> list = q.list();
         s.getTransaction().commit();
-        s.close();
+    //    s.close();
         return list;
     }
     

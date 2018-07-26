@@ -14,12 +14,11 @@ import util2.ResultUtil;
  * @author sasa.milenkovic
  */
 import Beans.*;
-import Hibernate.*;
 import Commons.*;
+import DAO.CandidateDAO;
+import DAO.TechnologyDAO;
 import java.util.*;
-import org.hibernate.Session;
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
+
 
 public class Autocorrect {
     
@@ -36,12 +35,7 @@ public class Autocorrect {
     
     public static List<ResultUtil> autocorrect(List<CandidateAnswers> caList){
         
-        //find the preferred technologies for the candidate
-        SessionFactory factory = HibernateUtil.getSessionFactory();
-        Session session = factory.getCurrentSession();
-     
-        Query query = session.getNamedQuery("Candidate.findById").setParameter("id", Common.id_user);
-        Candidate c = (Candidate) query.uniqueResult();
+        Candidate c = CandidateDAO.get(Common.id_user);
         
         if(c!=null){
         
@@ -49,14 +43,14 @@ public class Autocorrect {
               
               if(ctList!=null){
                   
-                  Query tQuery = null;
+//                  Query tQuery = null;
               
-                 for(CandidateTechnology ct : ctList)
-              
-                    tQuery = session.getNamedQuery("Technology.findById").setParameter("id", ct.getIdTechnology());
-                    techList.add((Technology) tQuery.uniqueResult());
-              
+                 for(CandidateTechnology ct : ctList){
+                   
+                      Technology tech = TechnologyDAO.get(ct.getIdTechnology().getId());
+                      techList.add(tech);
                  }
+
               
         }
           
@@ -101,30 +95,32 @@ public class Autocorrect {
               }
             
             }
+        }
         
-        CandidateAnswers.setList(null);
+     CandidateAnswers.setList(null);
+     return resultUtils;
         
-        return resultUtils;
     }
     
-    private static void setResultUtils(Technology tech){
+      private static void setResultUtils(Technology tech){
     
        ResultUtil resultUtil = new ResultUtil(tech.getText());
        resultUtil.setResultsMap(tech.getText(), 0);
        resultUtils.add(resultUtil);
   
-    }
+      }
     
      private static void setResults(ResultUtil resultUtil, Question q){
              
               Technology tech = q.getIdTechnology();
               String index = tech.getText();
          
-             if(resultUtil.existResult(index))
+             if(resultUtil.existResult(index)){
               
                resultUtil.setResult(q.getPoints());
                
              }
             
-         }
+     }
              
+}

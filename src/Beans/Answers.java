@@ -43,9 +43,9 @@ public class Answers implements Serializable {
     @Column(name = "text")
     private String text;
     @Basic(optional = false)
-    @Column(name = "correct_answer")
+    @Column(name = "is_correct")
     private boolean isCorrect;
-    @JoinColumn(name = "idQuestion", referencedColumnName = "id")
+    @JoinColumn(name = "id_Question", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Question idQuestion;
 

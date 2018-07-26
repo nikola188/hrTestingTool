@@ -31,7 +31,7 @@ public class QuestionDAO {
         s.beginTransaction();
         Question ct = (Question) s.get(Question.class, id);
         s.getTransaction().commit();
-        s.close();
+    //  s.close();
         return ct;
     }
     

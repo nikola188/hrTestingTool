@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,11 +38,13 @@ public class CandidateTechnology implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_candidate", referencedColumnName = "id")
-    @ManyToOne
     private Candidate idCandidate;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_technology", referencedColumnName = "id")
-    @ManyToOne
     private Technology idTechnology;
 
     public CandidateTechnology() {

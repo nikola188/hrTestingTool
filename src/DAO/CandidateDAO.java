@@ -41,7 +41,7 @@ public class CandidateDAO {
         s.close();
         return list;
     }
-    
+   
     public static boolean update(Candidate u){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();

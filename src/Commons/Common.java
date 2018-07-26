@@ -12,7 +12,7 @@ package Commons;
 //class for all global varables
 public class Common {
     
-    public static int id_user;
+    public static int id_user=1;
     public static int time;
     
 }

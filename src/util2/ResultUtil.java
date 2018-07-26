@@ -55,9 +55,7 @@ public class ResultUtil {
            
         boolean exist = resultsMap.containsKey(tech);
         
-        if(exist)
-              return true;
-        else return false;
+        return exist;
             
     }
  
