@@ -6,6 +6,8 @@
 package Core;
 
 import Beans.Result;
+import DAO.CandidateDAO;
+import Beans.Candidate;
 import util2.CandidateAnswers;
 import util2.ResultUtil;
 import util2.TestQuestion;
@@ -13,19 +15,19 @@ import java.util.List;
 
 /**
  *
- * @author nikola uzelac
+ * @author zoran.milicevic
  */
 
-//uzelac
+
 public class App {
-    public static boolean login(int id_candidate, int time, int number){
-        //check if the user exists in the database
-        
-        //if he doesnt exist
-        //return false;
-        //dodajem komentar
-        //if he does, call generateQuestion
-//        GenerateQuestion.getQuestions(id_candidate, number);
+    //uzelac
+    public static boolean login(int id_candidate, int time, int number) throws Exception{
+        Candidate candidate = CandidateDAO.get(id_candidate);
+        if(candidate != null){
+            GenerateQuestion.getQuestions(id_candidate, number);
+        } else {
+            return false;
+        }    
         return true;
     }
     
