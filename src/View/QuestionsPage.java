@@ -5,11 +5,18 @@
  */
 package View;
 
+import Beans.Answers;
+import Beans.Question;
 import Core.GenerateQuestion;
+import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import util2.TestQuestion;
 import util2.TimeRestriction;
 
@@ -23,12 +30,14 @@ public class QuestionsPage extends javax.swing.JPanel {
     
     private static int QUESTION_NUMBER = 0; 
     
+    private List<JCheckBox> offeredAnswers;
     private List<TestQuestion> questions;
     private List<QuestionPanel> panels;
     private static int MINUTES = 60;
     private int candidateId;
     private int numberOfQuestions;
     private int testDuration;
+    private double finalResult;
     
     private JFrame root;
 
@@ -38,6 +47,7 @@ public class QuestionsPage extends javax.swing.JPanel {
      */
     public QuestionsPage(int numberOfQuestions, int testDuration, int candidateId) throws Exception {
         panels = new ArrayList<>();
+        offeredAnswers = new ArrayList<>();
         this.numberOfQuestions = numberOfQuestions;
         this.testDuration = testDuration * MINUTES;
         this.candidateId = candidateId;
@@ -46,6 +56,8 @@ public class QuestionsPage extends javax.swing.JPanel {
         restriction = new TimeRestriction(timeBar);
         restriction.startTime();
         initQuestionPanels();
+        utilPanel.setVisible(true);
+        finalResult = 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -74,8 +86,18 @@ public class QuestionsPage extends javax.swing.JPanel {
         timeLabel.setText("Remaining Time");
 
         previousBtn.setText("Previous");
+        previousBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previousBtnActionPerformed(evt);
+            }
+        });
 
         nextBtn.setText("Next");
+        nextBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextBtnActionPerformed(evt);
+            }
+        });
 
         utilPanel.setLayout(new java.awt.BorderLayout());
 
@@ -119,7 +141,46 @@ public class QuestionsPage extends javax.swing.JPanel {
 
     private void endBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endBtnActionPerformed
         restriction.stopTime();
+        for(int i = 0; i < questions.size(); i++){
+            Question q = questions.get(i).getQuestion();
+            int points = q.getPoints();
+            int correctAnswers = 0;
+            Collection<Answers> answers = q.getAnswersCollection();
+            Iterator iterator = answers.iterator();
+            while(iterator.hasNext()){
+                Answers a = (Answers)iterator.next();
+                if(a.getIsCorrect()){
+                    correctAnswers++;
+                }
+            }
+            double pointsPerCorrect = points / correctAnswers;
+            
+        }
     }//GEN-LAST:event_endBtnActionPerformed
+
+    private void previousBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousBtnActionPerformed
+        if(QUESTION_NUMBER > 0){
+            JPanel panel = panels.get(QUESTION_NUMBER);
+            panel.setVisible(false);
+            utilPanel.remove(utilPanel.getComponent(0));
+            QUESTION_NUMBER--;
+            panel = panels.get(QUESTION_NUMBER);
+            panel.setVisible(true);
+            utilPanel.add(panel);
+        }
+    }//GEN-LAST:event_previousBtnActionPerformed
+
+    private void nextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBtnActionPerformed
+        if(QUESTION_NUMBER < questions.size() - 1){
+            JPanel panel = panels.get(QUESTION_NUMBER);
+            panel.setVisible(false);
+            utilPanel.remove(utilPanel.getComponent(0));
+            QUESTION_NUMBER++;
+            panel = panels.get(QUESTION_NUMBER);
+            panel.setVisible(true);
+            utilPanel.add(panel);
+        }
+    }//GEN-LAST:event_nextBtnActionPerformed
 
     public void setParent(JFrame frame){
         root = frame;
@@ -145,12 +206,26 @@ public class QuestionsPage extends javax.swing.JPanel {
             question.setHorizontalAlignment(JLabel.CENTER);
             panel.add(question);
             panel.setBounds(utilPanel.getBounds());
-            panel.setVisible(false);
-            panel.revalidate();
-            panel.repaint();
+            
+            // answers
+            
+            Question q = questions.get(i).getQuestion();
+            Collection<Answers> answers = q.getAnswersCollection();
+            Iterator iterator = answers.iterator();
+            while(iterator.hasNext()){
+                Answers a = (Answers)iterator.next();
+                JCheckBox box = new JCheckBox();
+                box.setText(a.getText());
+                box.setActionCommand(String.valueOf(a.getId()));
+                panel.add(box);
+                offeredAnswers.add(box);
+            }
+            
             panels.add(panel);
-            utilPanel.add(panel);
         }
+        JPanel jp = panels.get(QUESTION_NUMBER);
+        jp.setVisible(true);
+        utilPanel.add(jp);
     }
 
     public List<TestQuestion> getQuestions() {
