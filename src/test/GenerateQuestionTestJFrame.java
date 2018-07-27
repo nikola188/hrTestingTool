@@ -1,5 +1,6 @@
-package View;
+package test;
 
+import View.CandidateHomePanel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
@@ -9,12 +10,12 @@ import javax.swing.JFrame;
  * @author nikola.panajotovic
  * @author nikola.bijelic
  */
-public class TestGUI extends javax.swing.JFrame {
+public class GenerateQuestionTestJFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form TestGUI
      */
-    public TestGUI() {
+    public GenerateQuestionTestJFrame() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.addKeyListener(new KeyAdapter() {
@@ -70,20 +71,21 @@ public class TestGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TestGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GenerateQuestionTestJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TestGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GenerateQuestionTestJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TestGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GenerateQuestionTestJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TestGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GenerateQuestionTestJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JFrame frame = new TestGUI();
+                JFrame frame = new GenerateQuestionTestJFrame();
                 frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 frame.setVisible(true);
             }

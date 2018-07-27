@@ -3,7 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/Core/GenerateQuestion.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/test/GenerateQuestionTestJFrame.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/DAO/CandidateDAO.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/test/CandidateManagementViewTest.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/Beans/Result.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/View/CandidateHomePanel.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/DAO/CandidateTechnologyDAO.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/test/GenerateQuestionTest.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/DAO/ResultDAO.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/DAO/TechnologyDAO.java</file>
+            <file>file:/C:/Users/dusan.cvijic/Desktop/hrTestingTool/src/Beans/CandidateTechnology.java</file>
         </group>
     </open-files>
 </project-private>
