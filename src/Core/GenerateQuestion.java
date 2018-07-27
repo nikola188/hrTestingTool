@@ -13,7 +13,7 @@ import java.util.Random;
 
 /**
  *
- * @author zoran.milicevic
+ * @author dusan.cvijic
  */
 
 //dusan

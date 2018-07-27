@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,7 +55,7 @@ public class Question implements Serializable {
     @JoinColumn(name = "id_technology", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Technology idTechnology;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idQuestion")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idQuestion", fetch = FetchType.EAGER)
     private Collection<Answers> answersCollection;
 
     public Question() {

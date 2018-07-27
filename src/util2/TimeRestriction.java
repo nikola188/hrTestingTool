@@ -50,5 +50,9 @@ public class TimeRestriction {
     public void startTime(){
         timer.start();
     }
+    
+    public void stopTime(){
+        timer.stop();
+    }
 
 }
