@@ -1,1 +1,2 @@
 $echo "private.properties" >> .gitignore
+/dist/

@@ -6,10 +6,9 @@ import Beans.Result;
 import Beans.Technology;
 import DAO.CandidateDAO;
 import DAO.CandidateTechnologyDAO;
+import DAO.ResultDAO;
 import DAO.TechnologyDAO;
 import java.awt.Component;
-import java.awt.Container;
-import javax.swing.JComponent;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,32 +20,42 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 
-
+/**
+ *
+ * @author dusan.cvijic
+ * @author igor.neskovic
+ */
 public class CandidateHomePanel extends JPanel {
 
+//    Used for string checks later
+    private final String NEW_CANDIDATE_FIELD = "New Candidate";
+    
+//    Used as key values for componentMap collection
     private enum ComponentType {
         JBUTTON, JCOMBOBOX, JLABEL, JSCROLLPANE, JTEXTAREA, JCHECKBOX
     }
-//    private enum CheckBoxName {
-//        JAVA, SQL, PHP, PYTHON, JAVASCRIPT, ANGULAR, REACT, CPLUSPLUS, CSHARP, SPRING, MONGO, PLACEHOLDER_TECHNOLOGY_12,
-//        PLACEHOLDER_TECHNOLOGY_13, PLACEHOLDER_TECHNOLOGY_14, PLACEHOLDER_TECHNOLOGY_15
-//    }
     
+//    Core variables declaration
     private JFrame root;
     private List<Candidate> allCandidates;
     private List<Technology> knownTechnologies;
     private List<Result> candidateResults;
     private Candidate currentCandidate;
     private String selectedCandidate;
+//    
     
     public CandidateHomePanel() {
+//        Initializes panel and components
         initComponents();
+//        Sets up the componentMap collection used for grabbing needed lists of components
         initComponentMap();
+//        Puts checkboxes into it's own collection to correspond to technologyID
         initCheckBoxes();
     }
 
@@ -61,7 +70,6 @@ public class CandidateHomePanel extends JPanel {
         
         
 //        COMPONENT INSTANTIATION
-    
         componentMap = new HashMap<>();
         checkBoxes = new HashMap<>();
         jbDelete = new JButton();
@@ -87,25 +95,22 @@ public class CandidateHomePanel extends JPanel {
         jcb13 = new JCheckBox();
         jcb14 = new JCheckBox();
         jcb15 = new JCheckBox();
-        
-        refreshBase("New candidate");
+//        
+
+        refreshBase(NEW_CANDIDATE_FIELD);
         
 //        COMPONENT VALUES
-        
         jbDelete.setText("Delete");
         jbDelete.setEnabled(false);
+        jbSubmit.setText("Submit");
         
         jlTechnologies.setText("Technologies");
-
-        jbSubmit.setText("Submit");
-
         jlResults.setText("Results");
 
         jtaResults.setColumns(20);
         jtaResults.setRows(5);
-        jtaResults.setEnabled(true);
+        jtaResults.setEnabled(false);
         jspResults.setViewportView(jtaResults);
-        
 
         jcbJava.setText("JAVA");
         jcbSQL.setText("SQL");
@@ -122,44 +127,78 @@ public class CandidateHomePanel extends JPanel {
         jcb13.setText("PLACEHOLDER TECHNOLOGY 13");
         jcb14.setText("PLACEHOLDER TECHNOLOGY 14");
         jcb15.setText("PLACEHOLDER TECHNOLOGY 15");
-        
+//        
         
 //        EVENT LISTENERS
         
+//        Listener for selecting a candidate from dropdown menu
         jComboBoxSelectCandidate.addActionListener ((ActionEvent e) -> {
             
             selectedCandidate = (String) ((javax.swing.JComboBox) e.getSource()).getSelectedItem();
-            if(selectedCandidate.equals("New candidate")){
-                
+            jtaResults.setText("");
+            if(selectedCandidate.equals(NEW_CANDIDATE_FIELD)){
+//            If new candidate field is selected then you must be able to create a new candidate
                 getDeleteButton().setEnabled(false);
-                for(Map.Entry<Integer, JCheckBox> box : checkBoxes.entrySet()){
-                    box.getValue().setSelected(false);
-                }
-                JTextArea temp = (JTextArea) componentMap.get(ComponentType.JTEXTAREA).get(0);
-                temp.setText("");
+                deselectBoxes();
             } else {
-                
+//                If NEW_CANDIDATE_FIELD is not selected, then you must be able to select, delete and update specified candidate
                 int candidateId = Integer.parseInt(selectedCandidate);
                 
                 currentCandidate = CandidateDAO.get(candidateId);
                 knownTechnologies = TechnologyDAO.getByCandidateId(candidateId);
+                candidateResults = ResultDAO.getByCandidateId(candidateId);
+                if(candidateResults.isEmpty()){
+                    System.out.println("is empty");
+                } else {
+                    StringBuilder resultsString = new StringBuilder();
+                    for(Result results : candidateResults){
+                        resultsString.append("Result #");
+                        resultsString.append(results.getId());
+                        resultsString.append(" -- ");
+                        resultsString.append(results.getIdTechnology().getText());
+                        resultsString.append(": ");
+                        resultsString.append(results.getResult());
+                        resultsString.append(" points,\n");
+                    }
+                    resultsString.deleteCharAt(resultsString.length() - 2);
+                    jtaResults.setText(resultsString.toString());
+                }
+                
                 
                 getDeleteButton().setEnabled(true);
                 
-//                Method checks technologies that candidate knows, and unchecks ones that he doesnt know
+//                Method check boxes of technologies that candidate knows, and unchecks ones that he doesnt know
                 checkRequiredBoxes();
-                
                 
             }
         });
         
         jbSubmit.addActionListener ((ActionEvent e) -> {
             
-            if(selectedCandidate.equals("New candidate")){
+            if(selectedCandidate.equals(NEW_CANDIDATE_FIELD)){
                 int candidateId = CandidateDAO.insertAndGetId(new Candidate());
                 currentCandidate = CandidateDAO.get(candidateId);
-                System.out.println(candidateId);
-                insertTechnologies(currentCandidate);
+            } else {
+                CandidateTechnologyDAO.deleteByCandidateId(currentCandidate.getId());
+            }
+            insertTechnologies(currentCandidate);
+            refreshBase(currentCandidate.getId().toString());
+        });
+        
+        jbDelete.addActionListener ((ActionEvent e) -> {
+            
+            if(!selectedCandidate.equals(NEW_CANDIDATE_FIELD)){
+                int candidateId = Integer.parseInt(selectedCandidate);
+                currentCandidate = CandidateDAO.get(candidateId);
+                String confirmString = "Are you sure you want to delete " + currentCandidate.getId() + " from the base?";
+                int answer = JOptionPane.showConfirmDialog(root, confirmString);
+//                0 is yes
+                if(answer == 0){
+                    boolean success = deleteCandidate(currentCandidate);
+                    deselectBoxes();
+                    jtaResults.setText("");
+                    refreshBase(NEW_CANDIDATE_FIELD);
+                }
             }
             
         });
@@ -257,38 +296,7 @@ public class CandidateHomePanel extends JPanel {
     }// </editor-fold>                        
 
 
-    // Variables declaration - do not modify 
-    private Map<ComponentType, List<Component>> componentMap;
-    private Map<Integer, JCheckBox> checkBoxes;
-    private javax.swing.JLabel jlTechnologies;
-    private javax.swing.JLabel jlResults;   
     
-    private javax.swing.JComboBox<String> jComboBoxSelectCandidate;
-    
-    private javax.swing.JCheckBox jcbJava;
-    private javax.swing.JCheckBox jcbSQL;
-    private javax.swing.JCheckBox jcbPHP;
-    private javax.swing.JCheckBox jcbPython;
-    private javax.swing.JCheckBox jcbJavaScript;
-    private javax.swing.JCheckBox jcbAngular;
-    private javax.swing.JCheckBox jcbReact;
-    private javax.swing.JCheckBox jcbCPlusPlus;
-    private javax.swing.JCheckBox jcbCSharp;
-    private javax.swing.JCheckBox jcbSpring;
-    private javax.swing.JCheckBox jcbMongo;
-    private javax.swing.JCheckBox jcb12;
-    private javax.swing.JCheckBox jcb13;
-    private javax.swing.JCheckBox jcb14;
-    private javax.swing.JCheckBox jcb15;
-    
-    private javax.swing.JTextArea jtaResults;
-    
-    private javax.swing.JButton jbSubmit; 
-    private javax.swing.JButton jbDelete;    
-    
-    private javax.swing.JScrollPane jspResults;
-    // End of variables declaration                   
-
     public void setParent(JFrame frame){
         root = frame;
     }
@@ -322,28 +330,13 @@ public class CandidateHomePanel extends JPanel {
                     }
                 }
             }
-//            else if (temp instanceof JTextArea){
-//                componentMap.get(ComponentType.JTEXTAREA).add(temp);
-//            }
         
         }
         
     }
     
     private JButton getDeleteButton(){
-        for(Component currentButton : componentMap.get(ComponentType.JBUTTON)){
-            JButton current;
-            if(currentButton instanceof JButton){
-                current = (JButton) currentButton;
-            } else {
-                continue;
-            }
-            
-            if(current.getText().equals("Delete")){
-                return current;
-            }
-        }
-        return null;
+        return jbDelete;
     }
     
     private void checkRequiredBoxes(){
@@ -402,15 +395,12 @@ public class CandidateHomePanel extends JPanel {
         
     }
     
-    
-//    BOOKMARK
     private void refreshBase(String selected){
         
         DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>();
-        boxModel.addElement(selectedCandidate);
+        boxModel.addElement(NEW_CANDIDATE_FIELD);
         
         allCandidates = CandidateDAO.get();
-        System.out.println(allCandidates.size());
         currentCandidate = null;
         selectedCandidate = selected;
         
@@ -418,6 +408,8 @@ public class CandidateHomePanel extends JPanel {
             boxModel.addElement(c.getId().toString());
         });
         jComboBoxSelectCandidate.setModel(boxModel);
+        
+        jComboBoxSelectCandidate.setSelectedItem(selectedCandidate);
         
     }
     
@@ -438,5 +430,51 @@ public class CandidateHomePanel extends JPanel {
         checkBoxes.put(14, jcb14);
         checkBoxes.put(15, jcb15);
     }
+    
+    private boolean deleteCandidate(Candidate candidate){
+        boolean success = false;
+        if(ResultDAO.deleteByCandidateId(candidate.getId()) && CandidateTechnologyDAO.deleteByCandidateId(candidate.getId())){
+            success = true;
+        }
+        success = CandidateDAO.delete(candidate);
+        return success;
+    }
+    
+    private void deselectBoxes(){
+        for(Map.Entry<Integer, JCheckBox> box : checkBoxes.entrySet()){
+            box.getValue().setSelected(false);
+        }
+    }
 
+    // Component variables declaration - do not modify 
+    private Map<ComponentType, List<Component>> componentMap;
+    private Map<Integer, JCheckBox> checkBoxes;
+    private javax.swing.JLabel jlTechnologies;
+    private javax.swing.JLabel jlResults;   
+    
+    private javax.swing.JComboBox<String> jComboBoxSelectCandidate;
+    
+    private javax.swing.JCheckBox jcbJava;
+    private javax.swing.JCheckBox jcbSQL;
+    private javax.swing.JCheckBox jcbPHP;
+    private javax.swing.JCheckBox jcbPython;
+    private javax.swing.JCheckBox jcbJavaScript;
+    private javax.swing.JCheckBox jcbAngular;
+    private javax.swing.JCheckBox jcbReact;
+    private javax.swing.JCheckBox jcbCPlusPlus;
+    private javax.swing.JCheckBox jcbCSharp;
+    private javax.swing.JCheckBox jcbSpring;
+    private javax.swing.JCheckBox jcbMongo;
+    private javax.swing.JCheckBox jcb12;
+    private javax.swing.JCheckBox jcb13;
+    private javax.swing.JCheckBox jcb14;
+    private javax.swing.JCheckBox jcb15;
+    
+    private javax.swing.JTextArea jtaResults;
+    
+    private javax.swing.JButton jbSubmit; 
+    private javax.swing.JButton jbDelete;    
+    
+    private javax.swing.JScrollPane jspResults;
+    // End of component variables declaration            
 }

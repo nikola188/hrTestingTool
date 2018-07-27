@@ -8,6 +8,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import util2.TestQuestion;
 
+/**
+ *
+ * @author dusan.cvijic
+ * @author igor.neskovic
+ */
 public class GenerateQuestionTest {
     
    private static SessionFactory factory;
@@ -40,7 +45,7 @@ public class GenerateQuestionTest {
             System.out.println("Testing GenerateQuestion for candidateId 2 who knows 4 technologies");
 
             int candidateId = 2;
-            int numberOfQuestions = 5;
+            int numberOfQuestions = 7;
             
             GenerateQuestion.getQuestions(candidateId, numberOfQuestions);
             List<TestQuestion> questions = GenerateQuestion.getList();

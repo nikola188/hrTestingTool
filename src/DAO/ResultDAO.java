@@ -60,4 +60,27 @@ public class ResultDAO {
         s.close();
         return true;
     } 
+
+    public static List<Result> getByCandidateId(int candidateId){
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q = s.createQuery("from Result WHERE idCandidate = :candidateIdParam");
+        q.setInteger("candidateIdParam", candidateId);
+        List<Result> list=q.list();
+        s.getTransaction().commit();
+        s.close();
+        return list;
+    }
+    
+    public static boolean deleteByCandidateId(int candidateId){
+        
+        List<Result> list = getByCandidateId(candidateId);
+        boolean success = true;
+        for(Result result : list){
+            if(!delete(result)){
+                success = false;
+            };
+        }
+        return success;
+    }
 }

@@ -58,16 +58,26 @@ public class CandidateTechnologyDAO {
         s.close();
         return true;
     } 
+    
+    private static List<CandidateTechnology> getByCandidateId(int candidateId){
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q = s.createQuery("from CandidateTechnology WHERE idCandidate = :candidateIdParam");
+        q.setInteger("candidateIdParam", candidateId);
+        List<CandidateTechnology> list = q.list();
+        s.getTransaction().commit();
+        s.close();
+        return list;
+    }
 
-//    public static void massInsert(int candidateId, List<String> stringTechs) {
-//        
-//        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
-//        s.beginTransaction();
-//        
-//        s.save(ct);
-//        s.getTransaction().commit();
-//        s.close();
-//        return true;
-//        
-//    }
+    public static boolean deleteByCandidateId(Integer candidateId) {
+        List<CandidateTechnology> list = getByCandidateId(candidateId);
+        boolean success = true;
+        for(CandidateTechnology ct : list){
+            if(!delete(ct)){
+                success = false;
+            };
+        }
+        return success;
+    }
 }
