@@ -17,15 +17,18 @@ import javax.swing.JPanel;
 import util2.TestQuestion;
 import util2.TimeRestriction;
 import Beans.Question;
+import DAO.AnswersDAO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author nikola.panajotovic
  * @author nikola.bijelic
+ * @author stefan.savic
  */
 public class QuestionsPage extends javax.swing.JPanel {
     
@@ -34,7 +37,8 @@ public class QuestionsPage extends javax.swing.JPanel {
     private int candidateId;
     private int numberOfQuestions;
     private int testDuration;
-    private List<JCheckBox> candidateAnswers;
+    private List<JCheckBox> offeredAnswers;
+    private List<Answers> candidateAnswers;
     private int finalResult;
     
     private JFrame root;
@@ -44,6 +48,7 @@ public class QuestionsPage extends javax.swing.JPanel {
      * Creates new form QuestionsPage
      */
     public QuestionsPage(int numberOfQuestions, int testDuration, int candidateId) throws Exception {
+        offeredAnswers = new ArrayList<>();
         candidateAnswers = new ArrayList<>();
         this.numberOfQuestions = numberOfQuestions;
         this.testDuration = testDuration * MINUTES;
@@ -112,18 +117,34 @@ public class QuestionsPage extends javax.swing.JPanel {
 
     private void endBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endBtnActionPerformed
         restriction.stopTime();
-        int startPoint = 0;
-        for(int i = 0; i < questions.size(); i++){
-            Question question = questions.get(i).getQuestion();
-            Collection<Answers> answers = question.getAnswersCollection();
-            int questionPoints = question.getPoints();
-            int offeredAnswers = question.getAnswersCollection().size();
-            Iterator iter = answers.iterator();
-            
-            while(iter.hasNext()){
-                
+        int score = 0;
+        for(JCheckBox box : offeredAnswers){
+            if(box.isSelected()){
+                int answerId = Integer.parseInt(box.getActionCommand());
+                candidateAnswers.add(AnswersDAO.get(answerId));
             }
         }
+        
+        
+        for(Answers a : candidateAnswers){
+            Question q = a.getIdQuestion();
+            int points = q.getPoints();
+            int correctAnswers = 0;
+            Collection<Answers> qa = q.getAnswersCollection();
+            Iterator iter = qa.iterator();
+            while(iter.hasNext()){
+                Answers an = (Answers)iter.next();
+                if(an.getIsCorrect()){
+                    correctAnswers++;
+                }
+            }
+            int pointsPerAnswer = points / correctAnswers;
+            if(a.getIsCorrect()){
+                finalResult += pointsPerAnswer;
+            }
+        }
+        System.out.println(finalResult);
+        JOptionPane.showMessageDialog(root, "Your final result is: " + finalResult);
     }//GEN-LAST:event_endBtnActionPerformed
 
     public void setParent(JFrame frame){
@@ -165,7 +186,7 @@ public class QuestionsPage extends javax.swing.JPanel {
                 JCheckBox checkBox = new JCheckBox();
                 Answers a = (Answers) iter.next();
                 checkBox.setActionCommand(String.valueOf(a.getId()));
-                candidateAnswers.add(checkBox);
+                offeredAnswers.add(checkBox);
                 String answer = a.getText();
                 checkBox.setText(answer);
                 panel.add(checkBox);
