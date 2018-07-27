@@ -4,72 +4,82 @@
  * and open the template in the editor.
  */
 package DAO;
-
-import Beans.Answers;
+import Beans.CandidateTechnology;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
 /**
  *
  * @author zoran.milicevic
  */
-public class AnswersDAO {
-        public static boolean insert(Answers a){
+public class CandidateTechnologyDAO {
+     public static boolean insert(CandidateTechnology ct){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        s.save(a);
+        s.save(ct);
         s.getTransaction().commit();
         s.close();
         return true;
     }
     
-    public static Answers get(int id){
+    public static CandidateTechnology get(int id){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Answers a = (Answers) s.get(Answers.class, id);
+        CandidateTechnology ct = (CandidateTechnology) s.get(CandidateTechnology.class, id);
         s.getTransaction().commit();
         s.close();
-        return a;
+        return ct;
     }
     
-    public static List<Answers> get(){
+    public static List<CandidateTechnology> get(){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query q = s.createQuery("from Answers");
-        List<Answers> list = q.list();
+        Query q= s.createQuery("from CandidateTechnology");
+        List<CandidateTechnology> list=q.list();
         s.getTransaction().commit();
         s.close();
         return list;
     }
     
-    public static boolean update(Answers a){
+    public static boolean update(CandidateTechnology ct){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        s.update(a);
+        s.update(ct);
         s.getTransaction().commit();
         s.close();
         return true;
     }
     
-    public static boolean delete(Answers a){
+    public static boolean delete(CandidateTechnology ct){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        s.delete(a);
+        s.delete(ct);
         s.getTransaction().commit();
         s.close();
         return true;
     } 
     
 //    Dusan cvijic
-    public static List<Answers> getByQuestionId(int questionId){
+    private static List<CandidateTechnology> getByCandidateId(int candidateId){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        Query q = s.createQuery("from Answers where idQuestion = :questionIdParam");
-        q.setInteger("questionIdParam", questionId);
-        List<Answers> list = q.list();
+        Query q = s.createQuery("from CandidateTechnology WHERE idCandidate = :candidateIdParam");
+        q.setInteger("candidateIdParam", candidateId);
+        List<CandidateTechnology> list = q.list();
         s.getTransaction().commit();
         s.close();
         return list;
+    }
+
+//    Dusan cvijic
+    public static boolean deleteByCandidateId(Integer candidateId) {
+        List<CandidateTechnology> list = getByCandidateId(candidateId);
+        boolean success = true;
+        for(CandidateTechnology ct : list){
+            if(!delete(ct)){
+                success = false;
+            };
+        }
+        return success;
     }
 }
