@@ -58,4 +58,16 @@ public class CandidateTechnologyDAO {
         s.close();
         return true;
     } 
+
+//    public static void massInsert(int candidateId, List<String> stringTechs) {
+//        
+//        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+//        s.beginTransaction();
+//        
+//        s.save(ct);
+//        s.getTransaction().commit();
+//        s.close();
+//        return true;
+//        
+//    }
 }

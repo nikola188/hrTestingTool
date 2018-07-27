@@ -60,4 +60,36 @@ public class TechnologyDAO {
         s.close();
         return true;
     } 
+    
+    public static List<Technology> getByCandidateId(int candidateId){
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q = s.createQuery("Select t from Technology as t JOIN t.candidateTechnologyCollection as ct WHERE ct.idCandidate = :candidateIdParam");
+        q.setInteger("candidateIdParam", candidateId);
+        List<Technology> list=q.list();
+        s.getTransaction().commit();
+        s.close();
+        return list;
+    }
+
+    public static List<Technology> findMultipleByText(List<String> stringTechs) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("from Technology where text like");
+        for(String tech : stringTechs){
+            if(!sb.toString().endsWith("like")){
+                sb.append(" or text like");
+                
+            }
+            sb.append(" ");
+            sb.append("'").append(tech).append("'");
+        }
+        
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q = s.createQuery(sb.toString());
+        List<Technology> list = q.list();
+        s.getTransaction().commit();
+        s.close();
+        return list;
+    }
 }

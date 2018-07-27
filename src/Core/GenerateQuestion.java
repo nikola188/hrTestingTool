@@ -10,6 +10,7 @@ import util2.TestQuestion;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 /**
  *
@@ -29,6 +30,8 @@ public class GenerateQuestion {
         GenerateQuestion.list = list;
     }
     
+    private static Random rand = new Random();
+    
     
 //    This method splits an array of questions into a map, where the key is the id of the category of the question
     private static Map<Integer, ArrayList<Question>> splitCategories(List<Question> questions){
@@ -46,43 +49,66 @@ public class GenerateQuestion {
     }
     
 //    This method returns a list of random questions according to the technologies the candidate knows and the number of questions from the argument
-    public static void getQuestions(int candidateId, int numberOfQuestions) throws Exception{
+    private static void setupList(int candidateId, int questionsPerCategory, int numberOfQuestions, HashMap<Integer, ArrayList<Question>> categories) throws Exception{
+        
         if(list == null){
             list = new ArrayList<>();
         } else {
             list.clear();
         }
-        Random rand = new Random();
-     
-        List<Question> questionList = QuestionDAO.getQuestionsByCandidateId(candidateId);
         
-        if(questionList == null){
-            throw new Exception("EXCEPTION: List of questions from database is null. Try making sure the candidateId is good and that you have stuff in your base");
-        }
-        HashMap<Integer, ArrayList<Question>> categories = (HashMap<Integer, ArrayList<Question>>) splitCategories(questionList);
-        
-        questionList.clear();
-        
+        List<Question> questionList = new ArrayList<>();
+        ArrayList tempQuestionList = null;
         for(Map.Entry<Integer, ArrayList<Question>> entry : categories.entrySet()) {
             System.out.println(entry.getKey());
             
             int techIdKey = entry.getKey();
-            ArrayList tempList = entry.getValue();
+            tempQuestionList = entry.getValue();
             
-            if(numberOfQuestions > tempList.size()){
+            if(questionsPerCategory  > tempQuestionList.size()){
                 throw new Exception("EXCEPTION: Not enough questions");
             } else {
-                for(int i = 0; i < numberOfQuestions; i++){
-                    int randomInt;
-                    Question randomQuestion;
-                    do{
-                        randomInt = rand.nextInt(categories.get(techIdKey).size());
-                        randomQuestion = (Question) tempList.get(randomInt);
-                    }while(questionList.contains(randomQuestion));
-                    ArrayList<Answers> answers = (ArrayList<Answers>) AnswersDAO.getByQuestionId(randomQuestion.getId());
-                    list.add(new TestQuestion(randomQuestion, answers));
+                for(int i = 0; i < questionsPerCategory; i++){
+//                    saddfsdf
+                    tempQuestionList = categories.get(techIdKey);
+                    questionList = insertQuestionIntoList(categories, tempQuestionList, questionList);
                 }
             }
         }
+        Integer i = 0;
+        while(list.size() < numberOfQuestions){
+            Set<Integer> keys = categories.keySet();
+            tempQuestionList = categories.get(keys.toArray()[i]);
+            questionList = insertQuestionIntoList(categories, tempQuestionList, questionList);
+            i++;
+        }
     }    
+    
+    public static void getQuestions(int candidateId, int numberOfQuestions) throws Exception{
+        List<Question> questionList = QuestionDAO.getQuestionsByCandidateId(candidateId);
+        if(questionList == null){
+            throw new Exception("EXCEPTION: List of questions from database is null. Try making sure the candidateId is good and that you have stuff in your base");
+        }
+        
+        HashMap<Integer, ArrayList<Question>> categories = (HashMap<Integer, ArrayList<Question>>) splitCategories(questionList);
+        System.out.println("category count" + categories.size());
+        int questionsPerCategory = numberOfQuestions/categories.size();
+        System.out.println("questionspercategory" + questionsPerCategory);
+        setupList(candidateId, questionsPerCategory, numberOfQuestions, categories);
+    }
+    
+    private static ArrayList<Question> insertQuestionIntoList(HashMap<Integer, ArrayList<Question>> categories, ArrayList tempQuestionList, List<Question> questionList){
+        int randomInt;
+        Question randomQuestion;
+        do{
+            randomInt = rand.nextInt(tempQuestionList.size());
+            randomQuestion = (Question) tempQuestionList.get(randomInt);
+        }while(questionList.contains(randomQuestion));
+
+        questionList.add(randomQuestion);
+
+        ArrayList<Answers> answers = (ArrayList<Answers>) AnswersDAO.getByQuestionId(randomQuestion.getId());
+        list.add(new TestQuestion(randomQuestion, answers));
+        return (ArrayList<Question>) questionList;
+    }
 }

@@ -59,4 +59,24 @@ public class CandidateDAO {
         s.close();
         return true;
     } 
+    
+    public static Candidate getNewestCandidate(){
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q= s.createQuery("from candidate where id = (select MAX(id) from candidate);");
+        Candidate u = (Candidate) q.uniqueResult();
+        s.getTransaction().commit();
+        s.close();
+        return u;
+    }
+    
+    public static int insertAndGetId(Candidate u){
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Integer c = (Integer) s.save(u);
+        s.getTransaction().commit();
+        s.close();
+        return c;
+    }
+    
 }

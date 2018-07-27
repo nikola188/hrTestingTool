@@ -39,8 +39,8 @@ public class GenerateQuestionTest {
 
             System.out.println("Testing GenerateQuestion for candidateId 2 who knows 4 technologies");
 
-            int candidateId = 1;
-            int numberOfQuestions = 1;
+            int candidateId = 2;
+            int numberOfQuestions = 5;
             
             GenerateQuestion.getQuestions(candidateId, numberOfQuestions);
             List<TestQuestion> questions = GenerateQuestion.getList();
