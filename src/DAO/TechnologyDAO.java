@@ -72,6 +72,7 @@ public class TechnologyDAO {
         return list;
     }
 
+//    Dusan cvijic
     public static List<Technology> findMultipleByText(List<String> stringTechs) {
         StringBuilder sb = new StringBuilder();
         sb.append("from Technology where text like");

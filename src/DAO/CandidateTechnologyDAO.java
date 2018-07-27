@@ -59,6 +59,7 @@ public class CandidateTechnologyDAO {
         return true;
     } 
     
+//    Dusan cvijic
     private static List<CandidateTechnology> getByCandidateId(int candidateId){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
@@ -70,6 +71,7 @@ public class CandidateTechnologyDAO {
         return list;
     }
 
+//    Dusan cvijic
     public static boolean deleteByCandidateId(Integer candidateId) {
         List<CandidateTechnology> list = getByCandidateId(candidateId);
         boolean success = true;
