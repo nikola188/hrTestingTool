@@ -5,24 +5,13 @@
  */
 package View;
 
-import Beans.Answers;
 import Core.GenerateQuestion;
-import java.awt.Component;
-import java.awt.Font;
+import java.util.ArrayList;
 import java.util.List;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import util2.TestQuestion;
 import util2.TimeRestriction;
-import Beans.Question;
-import DAO.AnswersDAO;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,14 +21,14 @@ import javax.swing.JOptionPane;
  */
 public class QuestionsPage extends javax.swing.JPanel {
     
+    private static int QUESTION_NUMBER = 0; 
+    
     private List<TestQuestion> questions;
+    private List<QuestionPanel> panels;
     private static int MINUTES = 60;
     private int candidateId;
     private int numberOfQuestions;
     private int testDuration;
-    private List<JCheckBox> offeredAnswers;
-    private List<Answers> candidateAnswers;
-    private int finalResult;
     
     private JFrame root;
 
@@ -48,17 +37,15 @@ public class QuestionsPage extends javax.swing.JPanel {
      * Creates new form QuestionsPage
      */
     public QuestionsPage(int numberOfQuestions, int testDuration, int candidateId) throws Exception {
-        offeredAnswers = new ArrayList<>();
-        candidateAnswers = new ArrayList<>();
+        panels = new ArrayList<>();
         this.numberOfQuestions = numberOfQuestions;
         this.testDuration = testDuration * MINUTES;
         this.candidateId = candidateId;
         initComponents();
         TimeRestriction.TESTDURATION = this.testDuration;
         restriction = new TimeRestriction(timeBar);
-        initQuestionPanel(this.candidateId, this.numberOfQuestions);
         restriction.startTime();
-        finalResult = 0;
+        initQuestionPanels();
     }
 
     @SuppressWarnings("unchecked")
@@ -68,7 +55,9 @@ public class QuestionsPage extends javax.swing.JPanel {
         endBtn = new javax.swing.JButton();
         timeBar = new javax.swing.JProgressBar();
         timeLabel = new javax.swing.JLabel();
-        tabPanelQuestions = new javax.swing.JTabbedPane();
+        previousBtn = new javax.swing.JButton();
+        nextBtn = new javax.swing.JButton();
+        utilPanel = new javax.swing.JPanel();
 
         endBtn.setText("End Test");
         endBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -84,6 +73,12 @@ public class QuestionsPage extends javax.swing.JPanel {
         timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         timeLabel.setText("Remaining Time");
 
+        previousBtn.setText("Previous");
+
+        nextBtn.setText("Next");
+
+        utilPanel.setLayout(new java.awt.BorderLayout());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,20 +86,27 @@ public class QuestionsPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabPanelQuestions)
+                    .addComponent(utilPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(endBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(timeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(timeBar, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE))))
+                            .addComponent(timeBar, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(previousBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tabPanelQuestions, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                .addComponent(utilPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(previousBtn)
+                    .addComponent(nextBtn))
                 .addGap(18, 18, 18)
                 .addComponent(timeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -117,34 +119,6 @@ public class QuestionsPage extends javax.swing.JPanel {
 
     private void endBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endBtnActionPerformed
         restriction.stopTime();
-        int score = 0;
-        for(JCheckBox box : offeredAnswers){
-            if(box.isSelected()){
-                int answerId = Integer.parseInt(box.getActionCommand());
-                candidateAnswers.add(AnswersDAO.get(answerId));
-            }
-        }
-        
-        
-        for(Answers a : candidateAnswers){
-            Question q = a.getIdQuestion();
-            int points = q.getPoints();
-            int correctAnswers = 0;
-            Collection<Answers> qa = q.getAnswersCollection();
-            Iterator iter = qa.iterator();
-            while(iter.hasNext()){
-                Answers an = (Answers)iter.next();
-                if(an.getIsCorrect()){
-                    correctAnswers++;
-                }
-            }
-            int pointsPerAnswer = points / correctAnswers;
-            if(a.getIsCorrect()){
-                finalResult += pointsPerAnswer;
-            }
-        }
-        System.out.println(finalResult);
-        JOptionPane.showMessageDialog(root, "Your final result is: " + finalResult);
     }//GEN-LAST:event_endBtnActionPerformed
 
     public void setParent(JFrame frame){
@@ -153,45 +127,38 @@ public class QuestionsPage extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton endBtn;
-    private javax.swing.JTabbedPane tabPanelQuestions;
+    private javax.swing.JButton nextBtn;
+    private javax.swing.JButton previousBtn;
     private javax.swing.JProgressBar timeBar;
     private javax.swing.JLabel timeLabel;
+    private javax.swing.JPanel utilPanel;
     // End of variables declaration//GEN-END:variables
 
-    private void initQuestionPanel(int candidateId, int numberOfQuestions) throws Exception {
+
+    private void initQuestionPanels() throws Exception {
         GenerateQuestion.getQuestions(candidateId, numberOfQuestions);
         questions = GenerateQuestion.getList();
-        int numQuestions = questions.size();
-        for(int i = 0; i < numQuestions; i++){
-            JPanel panel= new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-            
-            
-            // initialize question text
-            JLabel label= new JLabel();
-            Font labelFont = label.getFont();
-            label.setText(questions.get(i).getQuestion().getText());
-            label.setFont(label.getFont().deriveFont(36.0f));
-            label.setAlignmentX(Component.CENTER_ALIGNMENT);
-            panel.add(label);
-            
-            
-            // initialize answers
-            Question q = questions.get(i).getQuestion();
-            Collection<Answers> l = q.getAnswersCollection();
-            
-            Iterator iter = l.iterator();
-            
-            while(iter.hasNext()){
-                JCheckBox checkBox = new JCheckBox();
-                Answers a = (Answers) iter.next();
-                checkBox.setActionCommand(String.valueOf(a.getId()));
-                offeredAnswers.add(checkBox);
-                String answer = a.getText();
-                checkBox.setText(answer);
-                panel.add(checkBox);
-            }
-            tabPanelQuestions.addTab("Question " + (i + 1), panel);
+        System.out.println(questions.size());
+        for(int i = 0; i < questions.size(); i++){
+            QuestionPanel panel = new QuestionPanel();
+            JLabel question = new JLabel(questions.get(i).getQuestion().getText());
+            question.setHorizontalAlignment(JLabel.CENTER);
+            panel.add(question);
+            panel.setBounds(utilPanel.getBounds());
+            panel.setVisible(false);
+            panel.revalidate();
+            panel.repaint();
+            panels.add(panel);
+            utilPanel.add(panel);
         }
     }
+
+    public List<TestQuestion> getQuestions() {
+        return questions;
+    }
+
+    public JFrame getRoot() {
+        return root;
+    }
+
 }

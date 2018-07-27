@@ -10,6 +10,9 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 import util2.CandidateDataCheck;
 
 /**
@@ -19,13 +22,18 @@ import util2.CandidateDataCheck;
  */
 public class StartPage extends javax.swing.JPanel {
     
+    public static int MINUTES_PER_QUESTION = 2; 
+    
     private JFrame root;
+    private String defaultTime;
 
     /**
      * Creates new form StartPage
      */
     public StartPage() {
         initComponents();
+        initNumberOfQuestionsListener();
+        defaultTime = null;
     }
 
     /**
@@ -53,6 +61,15 @@ public class StartPage extends javax.swing.JPanel {
 
         jLabel3.setText("Test Duration(min):");
 
+        testDurationTxt.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                testDurationTxtFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                testDurationTxtFocusLost(evt);
+            }
+        });
+
         startBtn.setText("Start Test");
         startBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,22 +84,22 @@ public class StartPage extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(425, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(startBtn)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(nmbOfQestTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(candidateIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
-                        .addComponent(testDurationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(521, 521, 521))
+                        .addComponent(testDurationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(startBtn)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(nmbOfQestTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(candidateIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(371, 371, 371))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,15 +123,19 @@ public class StartPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
-           
-           if(CandidateDataCheck.everythingFine(candidateIdTxt.getText(), nmbOfQestTxt.getText(), testDurationTxt.getText())){
+           String minutes[] = testDurationTxt.getText().split(" ");
+           int minutesLength = minutes.length;
+           if(minutesLength > 0){
+               if(CandidateDataCheck.everythingFine(candidateIdTxt.getText(), nmbOfQestTxt.getText(), minutes[minutesLength - 1])){
                QuestionsPage questionsPage;
                try {
-                   questionsPage = new QuestionsPage(Integer.parseInt(nmbOfQestTxt.getText()), Integer.parseInt(testDurationTxt.getText()), Integer.parseInt(candidateIdTxt.getText()));
+                   int testDuration = Integer.parseInt(minutes[minutesLength - 1]);
+                   questionsPage = new QuestionsPage(Integer.parseInt(nmbOfQestTxt.getText()), testDuration , Integer.parseInt(candidateIdTxt.getText()));
                    questionsPage.setParent(root);
                    questionsPage.setBounds(this.getBounds());
                    root.getContentPane().add(questionsPage);
                    this.setVisible(false);
+                   
                } catch (Exception ex) {
                    Logger.getLogger(StartPage.class.getName()).log(Level.SEVERE, null, ex);
                }
@@ -122,8 +143,34 @@ public class StartPage extends javax.swing.JPanel {
            }else {
                JOptionPane.showMessageDialog(root, "Numbers only!");
            }
+           }else {
+               if(CandidateDataCheck.everythingFine(candidateIdTxt.getText(), nmbOfQestTxt.getText(), minutes[0])){
+               QuestionsPage questionsPage;
+               try {
+                   questionsPage = new QuestionsPage(Integer.parseInt(nmbOfQestTxt.getText()), Integer.parseInt(testDurationTxt.getText()) , Integer.parseInt(candidateIdTxt.getText()));
+                   questionsPage.setParent(root);
+                   questionsPage.setBounds(this.getBounds());
+                   root.getContentPane().add(questionsPage);
+                   this.setVisible(false);
+                   
+               } catch (Exception ex) {
+                   Logger.getLogger(StartPage.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               
+           }else {
+               JOptionPane.showMessageDialog(root, "Numbers only!");
+           }
+           }
            
     }//GEN-LAST:event_startBtnActionPerformed
+
+    private void testDurationTxtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_testDurationTxtFocusGained
+        testDurationTxt.setText("");
+    }//GEN-LAST:event_testDurationTxtFocusGained
+
+    private void testDurationTxtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_testDurationTxtFocusLost
+        testDurationTxt.setText(defaultTime);
+    }//GEN-LAST:event_testDurationTxtFocusLost
 
     public void setParent(JFrame frame){
         root = frame;
@@ -152,4 +199,37 @@ public class StartPage extends javax.swing.JPanel {
     private javax.swing.JButton startBtn;
     private javax.swing.JTextField testDurationTxt;
     // End of variables declaration//GEN-END:variables
+
+    private void initNumberOfQuestionsListener() {
+        nmbOfQestTxt.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                int rightSide = e.getDocument().getLength();
+                int number = 0;
+                try {
+                    try {
+                        String currentNumber = e.getDocument().getText(0, rightSide);
+                        number = Integer.parseInt(currentNumber);
+                        testDurationTxt.setText("Default time duration for " + number + " of questions is " + number * MINUTES_PER_QUESTION);
+                        defaultTime = testDurationTxt.getText();
+                    } catch (NumberFormatException nfe) {
+                        JOptionPane.showMessageDialog(root, "Number Only!");
+                    }
+                    
+                } catch (BadLocationException ex) {
+                    Logger.getLogger(StartPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                
+            }
+        });
+    }
 }
