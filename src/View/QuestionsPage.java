@@ -35,6 +35,7 @@ public class QuestionsPage extends javax.swing.JPanel {
     private int numberOfQuestions;
     private int testDuration;
     private List<JCheckBox> candidateAnswers;
+    private int finalResult;
     
     private JFrame root;
 
@@ -52,6 +53,7 @@ public class QuestionsPage extends javax.swing.JPanel {
         restriction = new TimeRestriction(timeBar);
         initQuestionPanel(this.candidateId, this.numberOfQuestions);
         restriction.startTime();
+        finalResult = 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -110,9 +112,16 @@ public class QuestionsPage extends javax.swing.JPanel {
 
     private void endBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endBtnActionPerformed
         restriction.stopTime();
-        for(JCheckBox box : candidateAnswers){
-            if(box.isSelected()){
-                System.out.println(box.getText() + " for question: " + box.getActionCommand());
+        int startPoint = 0;
+        for(int i = 0; i < questions.size(); i++){
+            Question question = questions.get(i).getQuestion();
+            Collection<Answers> answers = question.getAnswersCollection();
+            int questionPoints = question.getPoints();
+            int offeredAnswers = question.getAnswersCollection().size();
+            Iterator iter = answers.iterator();
+            
+            while(iter.hasNext()){
+                
             }
         }
     }//GEN-LAST:event_endBtnActionPerformed
@@ -154,9 +163,9 @@ public class QuestionsPage extends javax.swing.JPanel {
             
             while(iter.hasNext()){
                 JCheckBox checkBox = new JCheckBox();
-                checkBox.setActionCommand(q.getText());
-                candidateAnswers.add(checkBox);
                 Answers a = (Answers) iter.next();
+                checkBox.setActionCommand(String.valueOf(a.getId()));
+                candidateAnswers.add(checkBox);
                 String answer = a.getText();
                 checkBox.setText(answer);
                 panel.add(checkBox);
