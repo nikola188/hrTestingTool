@@ -17,13 +17,13 @@ import org.hibernate.Transaction;
  * @author zoran.milicevic
  */
 public class QuestionDAO {
-     public static boolean insert(Question q){
+     public static int insert(Question q){
         Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
         s.beginTransaction();
-        s.save(q);
+        int i = (int)s.save(q);
         s.getTransaction().commit();
         s.close();
-        return true;
+        return i;
     }
     
     public static Question get(int id){

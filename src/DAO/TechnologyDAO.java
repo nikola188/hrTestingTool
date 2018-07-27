@@ -60,4 +60,15 @@ public class TechnologyDAO {
         s.close();
         return true;
     } 
+    
+    public static Technology getId(String technology){
+        Session s= Hibernate.HibernateUtil.getSessionFactory().openSession();
+        s.beginTransaction();
+        Query q= s.createQuery("from Technology where text='" + technology + "'");
+        List<Technology> list= q.list();
+        s.getTransaction().commit();
+        s.close();
+        return list.get(0);
+    }
+
 }
