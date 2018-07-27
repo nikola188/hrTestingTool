@@ -5,6 +5,8 @@
  */
 package View;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -106,11 +108,17 @@ public class StartPage extends javax.swing.JPanel {
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
            
            if(CandidateDataCheck.everythingFine(candidateIdTxt.getText(), nmbOfQestTxt.getText(), testDurationTxt.getText())){
-               QuestionsPage questionsPage = new QuestionsPage(Integer.parseInt(nmbOfQestTxt.getText()), Integer.parseInt(testDurationTxt.getText()), Integer.parseInt(candidateIdTxt.getText()));
-               questionsPage.setParent(root);
-               questionsPage.setBounds(this.getBounds());
-               root.getContentPane().add(questionsPage);
-               this.setVisible(false);
+               QuestionsPage questionsPage;
+               try {
+                   questionsPage = new QuestionsPage(Integer.parseInt(nmbOfQestTxt.getText()), Integer.parseInt(testDurationTxt.getText()), Integer.parseInt(candidateIdTxt.getText()));
+                   questionsPage.setParent(root);
+                   questionsPage.setBounds(this.getBounds());
+                   root.getContentPane().add(questionsPage);
+                   this.setVisible(false);
+               } catch (Exception ex) {
+                   Logger.getLogger(StartPage.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               
            }else {
                JOptionPane.showMessageDialog(root, "Numbers only!");
            }
